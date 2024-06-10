@@ -1,0 +1,7 @@
+name = "digit_detection"
+uuid = "6193bdd9-efa6-4ebd-82b6-e12b0e46ad02"
+authors = ["joao <joaolucasrrolim@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
