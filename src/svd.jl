@@ -1,5 +1,5 @@
 function golub_kahan_svd_step(
-    B::Matrix{Tp};
+    B::AbstractMatrix{Tp};
     atol::Tp = 1e-6
 ) where {Tp <: AbstractFloat}
     m = size(B, 1)
@@ -11,16 +11,16 @@ function golub_kahan_svd_step(
             !any(isapprox.(diag(B, 1), 0.0; atol=atol))
             "A must have no zeros on its diagonal or superdiagonal"
 
-    U = diagm(m, m, ones(m))
+    U = diagm(m, m, ones(Tp, m))
     Bnew = deepcopy(B)
-    V = diagm(n, n, ones(n))
+    V = diagm(n, n, ones(Tp, n))
 
-    T22 = Bnew[1:n, n - 1:n]'*Bnew[1:n, n - 1:n]
+    T22::Tp = Bnew[1:n, n - 1:n]'*Bnew[1:n, n - 1:n]
 
-    μ, _ = findmin(x -> abs(x - T22[2, 2]), eigvals(T22))
+    μ::Tp, _ = findmin(x -> abs(x - T22[2, 2]), eigvals(T22))
 
-    y = Bnew[1:n, 1]'*Bnew[1:n, 1] - μ
-    z = Bnew[1:n, 1]'*Bnew[1:n, 2]
+    y::Tp = Bnew[1:n, 1]'*Bnew[1:n, 1] - μ
+    z::Tp = Bnew[1:n, 1]'*Bnew[1:n, 2]
 
     for k = 1:n - 1
         G = givens(y, z; atol=atol)
@@ -43,7 +43,7 @@ end
 
 
 function svd(
-    A::Matrix{Tp};
+    A::AbstractMatrix{Tp};
     atol::Tp = 1e-6
 ) where {Tp <: AbstractFloat}
     m = size(A, 1)

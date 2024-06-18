@@ -1,5 +1,5 @@
 function bidiagonalize(
-    A::Matrix{Tp};
+    A::AbstractMatrix{Tp};
     atol::Tp = 1e-6
 ) where {Tp <: AbstractFloat}
     m = size(A, 1)
@@ -9,21 +9,21 @@ function bidiagonalize(
 
     B = deepcopy(A)
 
-    UWUYt = zeros(m, m)
-    VWVYt = zeros(n, n)
+    UWUYt = zeros(Tp, m, m)
+    VWVYt = zeros(Tp, n, n)
 
     for j = 1:n
         u, β = house(B[j:m, j]; atol=atol)
         B[j:m, j:n] = (I - β*u*u')*B[j:m, j:n]
 
-        u = vcat(zeros(j - 1), u)
+        u = vcat(zeros(Tp, j - 1), u)
         UWUYt = UWUYt + (I - UWUYt)*β*u*u'
 
         if j + 2 <= n
             v, β = house(B'[j + 1:n, j]; atol=atol)
             B[j:m, j + 1:n] = B[j:m, j + 1:n]*(I - β*v*v')
 
-            v = vcat(zeros(j), v)
+            v = vcat(zeros(Tp, j), v)
             VWVYt = VWVYt + (I - VWVYt)*β*v*v'
         end
     end

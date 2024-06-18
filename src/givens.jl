@@ -3,19 +3,19 @@ function givens(
     b::Tp;
     atol::Tp = 1e-6
 ) where {Tp <: AbstractFloat}
-    if isapprox(b, 0.0; atol=atol)
-        s = 0.0
-        c = 1.0
+    if isapprox(b, Tp(0.0); atol=atol)
+        s::Tp = 0.0
+        c::Tp = 1.0
     elseif abs(b) > abs(a)
-        τ = -a/b
-        s = 1.0/sqrt(1.0 + τ*τ)
-        c = s*τ
+        τ::Tp = -a/b
+        s::Tp = 1.0/sqrt(1.0 + τ*τ)
+        c::Tp = s*τ
     else
-        τ = -b/a
-        c = 1.0/sqrt(1.0 + τ*τ)
-        s = c*τ
+        τ::Tp = -b/a
+        c::Tp = 1.0/sqrt(1.0 + τ*τ)
+        s::Tp = c*τ
     end
 
-    return [c  s;
-            -s c]
+    return Tp[c  s;
+              -s c]
 end
